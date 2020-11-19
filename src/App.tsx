@@ -1,26 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {AppContainer} from "./styles";
+import {Column} from "./Column";
+import {Card} from "./Card";
+import {AddNewItem} from "./AddNewItem";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <AppContainer>
+            <Column text="To Do">
+                <Card text={"Generate app scaffold"}></Card>
+            </Column>
+            <Column text="In Progress">
+                <Card text={"Learn Typescript"}></Card>
+            </Column>
+            <Column text="Done">
+                <Card text={"Begin to use static typing"}></Card>
+            </Column>
+            <AddNewItem onAdd={console.log} toggleButtonText={"+ Add another list"}/>
+        </AppContainer>
+    );
 }
 
 export default App;
