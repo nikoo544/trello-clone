@@ -1,8 +1,7 @@
 import React, {createContext, useReducer, useContext} from "react";
 import {v1 as uuid} from 'uuid'
-import {findItemIndexById} from "./utils/findItemIndexById";
+import {findItemIndexById, overrideItemAtIndex, moveItem} from "./utils/arrayUtils";
 import {DragItem} from "./DragItem";
-import {moveItem} from "./moveItem";
 
 const AppStateContext = createContext<AppStateContextProps>({} as AppStateContextProps)
 
@@ -13,7 +12,6 @@ export const useAppState = () => {
 const appStateReducer = (state: AppState, action: Action): AppState => {
     switch (action.type) {
         case "ADD_LIST": {
-            //Reducer logic here...
             return {
                 ...state,
                 lists: [
@@ -23,26 +21,51 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
             }
         }
         case "ADD_TASK": {
-            //Reducer logic here...
-            const targetLaneIndex = findItemIndexById(
+            const targetListIndex = findItemIndexById(
                 state.lists,
-                action.payload.taskId
+                action.payload.listId
             )
-            state.lists[targetLaneIndex].tasks.push({
-                id: uuid(),
-                text: action.payload.text
-            })
+            const targetList = state.lists[targetListIndex]
+            const updatedTargetList = {
+                ...targetList,
+                tasks: [
+                    ...targetList.tasks,
+                    { id: uuid(), text: action.payload.text }
+                ]
+            }
             return {
-                ...state
+                ...state,
+                lists: overrideItemAtIndex(
+                    state.lists,
+                    updatedTargetList,
+                    targetListIndex
+                )
             }
         }
+
         case "MOVE_LIST": {
             const { dragIndex, hoverIndex } = action.payload
-            state.lists = moveItem(state.lists, dragIndex, hoverIndex)
-            return { ...state }
+            return {
+                ...state,
+                lists: moveItem(state.lists, dragIndex, hoverIndex)
+            }
         }
+
         case "SET_DRAGGED_ITEM": {
-            return {...state, draggedItem: action.payload }
+            return {...state, draggedItem: action.payload}
+        }
+        case "MOVE_TASK": {
+            const {
+                dragIndex,
+                hoverIndex,
+                sourceColumn,
+                targetColumn
+            } = action.payload
+            const sourceLaneIndex = findItemIndexById(state.lists, sourceColumn)
+            const targetLaneIndex = findItemIndexById(state.lists, targetColumn)
+            const item = state.lists[sourceLaneIndex].tasks.splice(dragIndex,1)[0]
+            state.lists[targetLaneIndex].tasks.splice(hoverIndex, 0, item)
+            return { ...state }
         }
         default: {
             return state
@@ -54,12 +77,12 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
 
 interface AppStateContextProps {
     state: AppState
-    dispatch: any
+    dispatch: React.Dispatch<Action>
 }
 
 export interface AppState {
     lists: List[]
-    draggedItem: any
+    draggedItem: DragItem | undefined;
 }
 
 interface List {
@@ -82,7 +105,7 @@ type Action =
 }
     | {
     type: "ADD_TASK"
-    payload: { text: string; taskId: string }
+    payload: { text: string; listId: string }
 }
     | {
     type: "MOVE_LIST"
@@ -95,8 +118,15 @@ type Action =
     type: "SET_DRAGGED_ITEM"
     payload: DragItem | undefined
 }
-
-
+    | {
+    type: "MOVE_TASK"
+    payload: {
+        dragIndex: number
+        hoverIndex: number
+        sourceColumn: string
+        targetColumn: string
+    }
+}
 //Provisional hardcode data
 
 //In this block, i set the draggedItem field of our state to whatever we get from
@@ -107,17 +137,17 @@ const appData: AppState = {
         {
             id: "0",
             text: "To Do",
-            tasks: [{id: "c0", text: "Generate app scaffold 🤿"}]
+            tasks: [{id: "c0", text: "Generate app scaffold"}]
         },
         {
             id: "1",
             text: "In Progress",
-            tasks: [{id: "c2", text: "Learn Typescript 🤓"}]
+            tasks: [{id: "c2", text: "Learn Typescript"}]
         },
         {
             id: "2",
             text: "Done",
-            tasks: [{id: "c3", text: "Begin to use static typing 🎃"}, {id: "c4", text: "Drink a coffe ☕"}]
+            tasks: [{id: "c3", text: "Begin to use static typing"}]
         }
     ],
 
