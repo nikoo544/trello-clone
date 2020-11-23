@@ -1,7 +1,7 @@
 import React, {createContext, useReducer, useContext} from "react";
 import {v1 as uuid} from 'uuid'
 import {findItemIndexById, overrideItemAtIndex, moveItem} from "./utils/arrayUtils";
-import {DragItem} from "./DragItem";
+import {DragItem} from "./Components/DragItem";
 
 const AppStateContext = createContext<AppStateContextProps>({} as AppStateContextProps)
 

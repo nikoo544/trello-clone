@@ -1,4 +1,4 @@
-import {DragItem} from "../DragItem";
+import {DragItem} from "../Components/DragItem";
 
 // Compare the type and id of the currently dragged item
 // with the type and id we pass to it as arguments.

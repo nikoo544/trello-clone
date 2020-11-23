@@ -1,12 +1,12 @@
 import React, {useRef} from "react";
-import {useAppState} from "./AppStateContext";
-import {ColumnContainer, ColumnTitle} from "./styles"
+import {useAppState} from "../AppStateContext";
+import {ColumnContainer, ColumnTitle} from "../styles"
 import {AddNewItem} from "./AddNewItem";
 import {Card} from "./Card";
-import {useItemDrag} from "./useItemDrag";
+import {useItemDrag} from "../utils/useItemDrag";
 import {useDrop} from "react-dnd";
 import {ColumnDragItem} from "./DragItem";
-import {isHidden} from "./utils/isHidden";
+import {isHidden} from "../utils/isHidden";
 
 
 interface ColumnProps {

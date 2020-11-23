@@ -1,9 +1,9 @@
 import React, {useRef} from "react";
-import {CardContainer} from "./styles";
+import {CardContainer} from "../styles";
 import {useDrop} from "react-dnd";
 import {CardDragItem} from "./DragItem";
-import {useItemDrag} from "./useItemDrag";
-import {useAppState} from "./AppStateContext";
+import {useItemDrag} from "../utils/useItemDrag";
+import {useAppState} from "../AppStateContext";
 
 interface CardProps {
     text: string;

@@ -1,7 +1,7 @@
 import {XYCoord, useDragLayer} from "react-dnd";
 import {Column} from "./Column";
 import React from "react";
-import {CustomDragLayerContainer} from "./styles";
+import {CustomDragLayerContainer} from "../styles";
 
 const CustomDragLayer: React.FC = () => {
     const { isDragging, item, currentOffset } = useDragLayer(monitor => ({

@@ -1,10 +1,10 @@
 import React from 'react';
 import {AppContainer} from "./styles";
-import {Column} from "./Column";
-import {AddNewItem} from "./AddNewItem";
+import {Column} from "./Components/Column";
+import {AddNewItem} from "./Components/AddNewItem";
 import {useAppState} from "./AppStateContext";
-import CustomDragLayer from "./CustomDragLayer";
-
+import CustomDragLayer from "./Components/CustomDragLayer";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
 
